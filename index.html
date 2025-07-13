@@ -1,3 +1,173 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=480, initial-scale=1.0" />
+  <title>디지털 리터러시 스피드퀴즈</title>
+  <style>
+    body {
+      font-family: 'SUIT', 'Pretendard', 'Noto Sans KR', Arial, sans-serif;
+      background: linear-gradient(110deg, #e6e9f3 0%, #b3dbfd 60%, #eaf6fd 100%);
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .app {
+      width: 420px;
+      background: #fff;
+      border-radius: 28px;
+      box-shadow: 0 8px 44px #cde3f9cc;
+      padding: 44px 32px 32px 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+    .title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #222;
+      margin-bottom: 18px;
+      line-height: 1.2;
+      text-align: center;
+      letter-spacing: -0.02em;
+      position: relative;
+    }
+    .title-glow {
+      position: absolute;
+      width: 110%;
+      height: 32px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, #b3dbfd55 10%, transparent 70%);
+      z-index: -1;
+      border-radius: 24px;
+      filter: blur(7px);
+    }
+    .intro-desc {
+      font-size: 1.1rem;
+      color: #333;
+      margin-top: 0;
+      text-align: center;
+      line-height: 1.7;
+      margin-bottom: 18px;
+    }
+    .intro-desc b {
+      color: #0086ff;
+      font-weight: 700;
+    }
+    .divider {
+      margin: 32px auto 20px;
+      width: 68%;
+      height: 1px;
+      background: linear-gradient(90deg, #e6e9f3 0%, #b3dbfd 50%, #e6e9f3 100%);
+      opacity: 0.66;
+      border-radius: 2px;
+      box-shadow: 0 1.5px 8px #b7d6e433;
+    }
+    .main-btns {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin: 0 0 24px 0;
+      width: 100%;
+    }
+    .ranking-btn, .prize-btn {
+      font-weight: 700;
+      font-size: 20px;
+      min-width: 160px;
+      height: 50px;
+      border-radius: 18px;
+      cursor: pointer;
+      border: 2px solid;
+      transition: 0.1s;
+    }
+    .ranking-btn {
+      border-color: #0099ff;
+      background: #eaf6fd;
+      color: #118;
+    }
+    .prize-btn {
+      border-color: #ff8844;
+      background: #fff5e6;
+      color: #d97d15;
+    }
+    .footer {
+      margin-top: 36px;
+      color: #aaa;
+      font-size: 1rem;
+      text-align: center;
+      letter-spacing: -0.01em;
+    }
+    /* --- 모달 팝업 스타일 --- */
+    .modal-bg {
+      position: fixed;
+      z-index: 9999;
+      top: 0; left: 0; right: 0; bottom: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.37);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: modal-fadein .18s;
+    }
+    @keyframes modal-fadein {
+      0% { opacity: 0;}
+      100% {opacity: 1;}
+    }
+    .modal-content {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 8px 38px #7cbfff35;
+      padding: 32px 20px 22px 20px;
+      position: relative;
+      max-width: 96vw;
+      overflow-y: auto;
+      animation: pop .13s;
+    }
+    @keyframes pop {
+      0% {transform: scale(0.97);}
+      100% {transform: scale(1);}
+    }
+    .modal-close {
+      position: absolute;
+      right: 17px; top: 12px;
+      background: none; border: none;
+      font-size: 27px; color: #87a;
+      cursor: pointer;
+    }
+    .ranking-board-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fafdff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 3px 18px #d1eafc33;
+    }
+    .ranking-board-table th, .ranking-board-table td {
+      padding: 9px 8px;
+      font-size: 1rem;
+    }
+    .ranking-board-table th {
+      background: #fafdff;
+      font-weight: 700;
+    }
+    .ranking-board-table tbody tr {
+      border-bottom: 1px solid #f2f2f2;
+    }
+    .ranking-board-table td {
+      text-align: center;
+    }
+    @media (max-width: 600px) {
+      .app { width: 99vw; padding: 20px 4vw 20px 4vw;}
+      .modal-content { padding: 17px 2vw 17px 2vw; }
+    }
+  </style>
+</head>
 <body>
   <div class="app">
     <!-- 인트로 화면 -->
@@ -18,121 +188,146 @@
       </p>
     </div>
     <div class="divider"></div>
-
-    <!-- 랭킹 보드 -->
-    <div style="margin:0 0 38px;">
-      <!-- 위의 ranking-board HTML코드 붙이기 -->
-      <div class="ranking-board" style="margin:0 auto 48px; max-width:570px;">
-  <h2 style="text-align:center; margin-bottom:14px; font-weight:800; font-size:2rem;">
-    🏆 실시간 랭킹 보드 (예시)
-  </h2>
-  <table style="width:100%; border-collapse:collapse; background:#fafdff; border-radius:16px; overflow:hidden; box-shadow:0 3px 18px #d1eafc33;">
-    <thead>
-      <tr style="border-bottom:2px solid #eee;">
-        <th style="text-align:center; font-weight:600; padding:12px 0;">순위</th>
-        <th style="text-align:left; font-weight:600;">이름</th>
-        <th style="text-align:left; font-weight:600;">회사</th>
-        <th style="text-align:center; font-weight:600;">시간(초)</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr style="border-bottom:1px solid #f2f2f2;">
-        <td style="text-align:center; color:#FFD700; font-weight:700; font-size:20px;">1</td>
-        <td style="font-weight:600; color:#277; font-size:18px;">김지민</td>
-        <td style="color:#488; font-size:18px;">농심</td>
-        <td style="text-align:center; font-weight:700;">32.16</td>
-      </tr>
-      <tr style="border-bottom:1px solid #f2f2f2;">
-        <td style="text-align:center; color:#FFD700; font-weight:700; font-size:19px;">2</td>
-        <td style="font-weight:600; color:#277; font-size:18px;">박선호</td>
-        <td style="color:#488; font-size:18px;">NDS</td>
-        <td style="text-align:center; font-weight:700;">34.25</td>
-      </tr>
-      <tr style="border-bottom:1px solid #f2f2f2;">
-        <td style="text-align:center; color:#FFD700; font-weight:700; font-size:18px;">3</td>
-        <td style="font-weight:600; color:#277; font-size:18px;">이예지</td>
-        <td style="color:#488; font-size:18px;">NDS</td>
-        <td style="text-align:center; font-weight:700;">35.10</td>
-      </tr>
-      <tr style="border-bottom:1px solid #f2f2f2;">
-        <td style="text-align:center; color:#222;">4</td>
-        <td style="font-weight:600; color:#277;">최우진</td>
-        <td style="color:#488;">농심</td>
-        <td style="text-align:center; font-weight:700;">38.85</td>
-      </tr>
-      <tr style="border-bottom:1px solid #f2f2f2;">
-        <td style="text-align:center; color:#222;">5</td>
-        <td style="font-weight:600; color:#277;">이하늘</td>
-        <td style="color:#488;">NDS</td>
-        <td style="text-align:center; font-weight:700;">41.22</td>
-      </tr>
-    </tbody>
-  </table>
-  <div style="text-align:right; margin-top:8px; color:#aaa; font-size:0.97rem;">* 예시 데이터입니다.</div>
-</div>
-
+    <!-- 버튼 -->
+    <div class="main-btns">
+      <button class="ranking-btn" onclick="showModal('ranking')">🏆 랭킹 보드</button>
+      <button class="prize-btn" onclick="showModal('prize')">🎁 이벤트 상품</button>
     </div>
-    <!-- 이벤트 상품 안내 -->
-    <div style="margin-bottom:0;">
-      <!-- 위의 event-prize-board HTML코드 붙이기 -->
-      <div class="event-prize-board" style="margin: 50px auto 36px; max-width:480px;">
-  <h2 style="text-align:center; margin-bottom:10px; font-weight:800; font-size:1.5rem; color:#1e7cb9;">
-    🎁 <span style="color:#ff8448;">이벤트 상품</span> 안내
-  </h2>
-  <div style="font-size:1rem; color:#555; text-align:center; margin-bottom:15px;">
-    스피드 퀴즈 랭킹에 따라<br />아래와 같은 선물을 드려요!
-  </div>
-  <div style="display:flex; flex-direction:column; gap:16px;">
-    <div style="display:flex; align-items:center; gap:12px; padding:12px; border-radius:13px; background:#fafdff; border:1.3px solid #bbdaf9;">
-      <img src="https://www.nongshimmall.com/web/product/big/202506/0a3ae33f8d10f7b79873d88ad1bc91bc.jpg" width="62" height="62" style="border-radius:10px; border:2px solid #f5f9ff;" />
-      <div>
-        <div style="font-weight:900; font-size:1.13rem; color:#2266d7;">🥇 1등</div>
-        <div style="font-weight:700; font-size:1.05rem; color:#333;">육개장 사발면 도자기 세트2</div>
-        <div style="font-size:0.95rem; color:#477; margin-top:1px;">든든+센스 만렙 세트!</div>
-      </div>
-    </div>
-    <div style="display:flex; align-items:center; gap:12px; padding:12px; border-radius:13px; background:#fafdff; border:1.3px solid #bbdaf9;">
-      <img src="https://www.nongshimmall.com/web/product/big/202505/0fc6d58c9dfcf5e894142ef86324010c.jpg" width="62" height="62" style="border-radius:10px; border:2px solid #f5f9ff;" />
-      <div>
-        <div style="font-weight:900; font-size:1.13rem; color:#2266d7;">🥈 2등</div>
-        <div style="font-weight:700; font-size:1.05rem; color:#333;">둥지메일배홍동세트 17입</div>
-        <div style="font-size:0.95rem; color:#477; margin-top:1px;">화끈하게 쟁여먹기!</div>
-      </div>
-    </div>
-    <div style="display:flex; align-items:center; gap:12px; padding:12px; border-radius:13px; background:#fafdff; border:1.3px solid #bbdaf9;">
-      <img src="https://www.nongshimmall.com/web/product/big/202406/da6afce18f7b47ba80b050f20d898326.jpg" width="62" height="62" style="border-radius:10px; border:2px solid #f5f9ff;" />
-      <div>
-        <div style="font-weight:900; font-size:1.13rem; color:#2266d7;">🥉 3등</div>
-        <div style="font-weight:700; font-size:1.05rem; color:#333;">먹태+소금+초코+신라면더레드큰사발_8입</div>
-        <div style="font-size:0.95rem; color:#477; margin-top:1px;">스낵 & 라면 퍼펙트 콜라보</div>
-      </div>
-    </div>
-    <div style="display:flex; align-items:center; gap:12px; padding:12px; border-radius:13px; background:#fff; border:1px solid #e8f0ff;">
-      <img src="https://www.biz-con.co.kr/upload/images/202501/400_20250122164028679_2.jpg" width="62" height="62" style="border-radius:10px; border:2px solid #f5f9ff;" />
-      <div>
-        <div style="font-weight:900; font-size:1.13rem; color:#2266d7;">4~10등</div>
-        <div style="font-weight:700; font-size:1.05rem; color:#333;">스타벅스 아이스 아메리카노 1잔</div>
-        <div style="font-size:0.95rem; color:#477; margin-top:1px;">아쉽지만 시원한 커피라도 한 잔</div>
-      </div>
-    </div>
-    <div style="display:flex; align-items:center; gap:12px; padding:12px; border-radius:13px; background:#fff; border:1px solid #e8f0ff;">
-      <img src="https://www.biz-con.co.kr/upload/images/202501/400_20250122164028679_2.jpg" width="62" height="62" style="border-radius:10px; border:2px solid #f5f9ff;" />
-      <div>
-        <div style="font-weight:900; font-size:1.13rem; color:#2266d7;">참여 추첨</div>
-        <div style="font-weight:700; font-size:1.05rem; color:#333;">스타벅스 아이스 아메리카노 1잔 (추첨 5명)</div>
-        <div style="font-size:0.95rem; color:#477; margin-top:1px;">도전만 해도 행운의 기회!</div>
-      </div>
-    </div>
-  </div>
-  <div style="margin:13px 0 0; color:#999; text-align:left; font-size:0.95rem;">
-    ※ 게임 프로그램의 취약점 또는 자동입력 프로그램을 이용한 이벤트 응모 시, 당첨에서 취소될 수 있습니다.<br>
-    ※ 이벤트 상품은 변경될 수 있습니다.
-  </div>
-</div>
-
-    </div>
-    <div class="footer" style="margin-top:36px;">
+    <div class="footer">
       &copy; 2025 디지털 리터러시 챌린지
     </div>
   </div>
+
+  <!-- 모달 영역 (동적으로 JS에서 표시/숨김 처리) -->
+  <div id="modal-bg" class="modal-bg" style="display:none;" onclick="hideModal()">
+    <div id="modal-content" class="modal-content" onclick="event.stopPropagation()">
+      <!-- 여기 내부가 동적으로 바뀜! -->
+    </div>
+  </div>
+
+  <script>
+    // 두 개의 모달 컨텐츠 미리 저장
+    const RANKING_HTML = `
+      <button class="modal-close" onclick="hideModal()">&times;</button>
+      <h2 style="text-align:center; margin-bottom:14px; font-weight:800; font-size:2rem;">
+        🏆 실시간 랭킹 보드 (예시)
+      </h2>
+      <table class="ranking-board-table">
+        <thead>
+          <tr style="border-bottom:2px solid #eee;">
+            <th>순위</th>
+            <th style="text-align:left;">이름</th>
+            <th style="text-align:left;">회사</th>
+            <th>시간(초)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="color:#FFD700; font-weight:700; font-size:20px;">1</td>
+            <td style="font-weight:600; color:#277; font-size:18px; text-align:left;">김지민</td>
+            <td style="color:#488; font-size:18px; text-align:left;">농심</td>
+            <td style="font-weight:700;">32.16</td>
+          </tr>
+          <tr>
+            <td style="color:#FFD700; font-weight:700; font-size:19px;">2</td>
+            <td style="font-weight:600; color:#277; font-size:18px; text-align:left;">박선호</td>
+            <td style="color:#488; font-size:18px; text-align:left;">NDS</td>
+            <td style="font-weight:700;">34.25</td>
+          </tr>
+          <tr>
+            <td style="color:#FFD700; font-weight:700; font-size:18px;">3</td>
+            <td style="font-weight:600; color:#277; font-size:18px; text-align:left;">이예지</td>
+            <td style="color:#488; font-size:18px; text-align:left;">NDS</td>
+            <td style="font-weight:700;">35.10</td>
+          </tr>
+          <tr>
+            <td style="color:#222;">4</td>
+            <td style="font-weight:600; color:#277; text-align:left;">최우진</td>
+            <td style="color:#488; text-align:left;">농심</td>
+            <td style="font-weight:700;">38.85</td>
+          </tr>
+          <tr>
+            <td style="color:#222;">5</td>
+            <td style="font-weight:600; color:#277; text-align:left;">이하늘</td>
+            <td style="color:#488; text-align:left;">NDS</td>
+            <td style="font-weight:700;">41.22</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="text-align:right; margin-top:8px; color:#aaa; font-size:0.97rem;">* 예시 데이터입니다.</div>
+    `;
+
+    const PRIZE_HTML = `
+      <button class="modal-close" onclick="hideModal()">&times;</button>
+      <h2 style="text-align:center; margin-bottom:10px; font-weight:800; font-size:1.5rem; color:#1e7cb9;">
+        🎁 <span style="color:#ff8448;">이벤트 상품</span> 안내
+      </h2>
+      <div style="font-size:1rem; color:#555; text-align:center; margin-bottom:15px;">
+        스피드 퀴즈 랭킹에 따라<br />아래와 같은 선물을 드려요!
+      </div>
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <div style="display:flex; align-items:center; gap:12px; padding:12px; border-radius:13px; background:#fafdff; border:1.3px solid #bbdaf9;">
+          <img src="https://www.nongshimmall.com/web/product/big/202506/0a3ae33f8d10f7b79873d88ad1bc91bc.jpg" width="62" height="62" style="border-radius:10px; border:2px solid #f5f9ff;" />
+          <div>
+            <div style="font-weight:900; font-size:1.13rem; color:#2266d7;">🥇 1등</div>
+            <div style="font-weight:700; font-size:1.05rem; color:#333;">육개장 사발면 도자기 세트2</div>
+            <div style="font-size:0.95rem; color:#477; margin-top:1px;">든든+센스 만렙 세트!</div>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px; padding:12px; border-radius:13px; background:#fafdff; border:1.3px solid #bbdaf9;">
+          <img src="https://www.nongshimmall.com/web/product/big/202505/0fc6d58c9dfcf5e894142ef86324010c.jpg" width="62" height="62" style="border-radius:10px; border:2px solid #f5f9ff;" />
+          <div>
+            <div style="font-weight:900; font-size:1.13rem; color:#2266d7;">🥈 2등</div>
+            <div style="font-weight:700; font-size:1.05rem; color:#333;">둥지메일배홍동세트 17입</div>
+            <div style="font-size:0.95rem; color:#477; margin-top:1px;">화끈하게 쟁여먹기!</div>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px; padding:12px; border-radius:13px; background:#fafdff; border:1.3px solid #bbdaf9;">
+          <img src="https://www.nongshimmall.com/web/product/big/202406/da6afce18f7b47ba80b050f20d898326.jpg" width="62" height="62" style="border-radius:10px; border:2px solid #f5f9ff;" />
+          <div>
+            <div style="font-weight:900; font-size:1.13rem; color:#2266d7;">🥉 3등</div>
+            <div style="font-weight:700; font-size:1.05rem; color:#333;">먹태+소금+초코+신라면더레드큰사발_8입</div>
+            <div style="font-size:0.95rem; color:#477; margin-top:1px;">스낵 & 라면 퍼펙트 콜라보</div>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px; padding:12px; border-radius:13px; background:#fff; border:1px solid #e8f0ff;">
+          <img src="https://www.biz-con.co.kr/upload/images/202501/400_20250122164028679_2.jpg" width="62" height="62" style="border-radius:10px; border:2px solid #f5f9ff;" />
+          <div>
+            <div style="font-weight:900; font-size:1.13rem; color:#2266d7;">4~10등</div>
+            <div style="font-weight:700; font-size:1.05rem; color:#333;">스타벅스 아이스 아메리카노 1잔</div>
+            <div style="font-size:0.95rem; color:#477; margin-top:1px;">아쉽지만 시원한 커피라도 한 잔</div>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px; padding:12px; border-radius:13px; background:#fff; border:1px solid #e8f0ff;">
+          <img src="https://www.biz-con.co.kr/upload/images/202501/400_20250122164028679_2.jpg" width="62" height="62" style="border-radius:10px; border:2px solid #f5f9ff;" />
+          <div>
+            <div style="font-weight:900; font-size:1.13rem; color:#2266d7;">참여 추첨</div>
+            <div style="font-weight:700; font-size:1.05rem; color:#333;">스타벅스 아이스 아메리카노 1잔 (추첨 5명)</div>
+            <div style="font-size:0.95rem; color:#477; margin-top:1px;">도전만 해도 행운의 기회!</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin:13px 0 0; color:#999; text-align:left; font-size:0.95rem;">
+        ※ 게임 프로그램의 취약점 또는 자동입력 프로그램을 이용한 이벤트 응모 시, 당첨에서 취소될 수 있습니다.<br>
+        ※ 이벤트 상품은 변경될 수 있습니다.
+      </div>
+    `;
+
+    function showModal(type) {
+      document.getElementById('modal-bg').style.display = '';
+      document.getElementById('modal-content').innerHTML =
+        type === 'ranking' ? RANKING_HTML : PRIZE_HTML;
+      document.body.style.overflow = 'hidden'; // 스크롤 잠금
+    }
+    function hideModal() {
+      document.getElementById('modal-bg').style.display = 'none';
+      document.getElementById('modal-content').innerHTML = '';
+      document.body.style.overflow = '';
+    }
+    // ESC로 닫기 기능
+    document.addEventListener('keydown', function(e) {
+      if (e.key === "Escape") hideModal();
+    });
+  </script>
 </body>
+</html>
