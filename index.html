@@ -205,57 +205,86 @@
     </div>
   </div>
 
-  <script>
-    // 두 개의 모달 컨텐츠 미리 저장
-    const RANKING_HTML = `
-      <button class="modal-close" onclick="hideModal()">&times;</button>
-      <h2 style="text-align:center; margin-bottom:14px; font-weight:800; font-size:2rem;">
-        🏆 실시간 랭킹 보드 (예시)
-      </h2>
-      <table class="ranking-board-table">
-        <thead>
-          <tr style="border-bottom:2px solid #eee;">
-            <th>순위</th>
-            <th style="text-align:left;">이름</th>
-            <th style="text-align:left;">회사</th>
-            <th>시간(초)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td style="color:#FFD700; font-weight:700; font-size:20px;">1</td>
-            <td style="font-weight:600; color:#277; font-size:18px; text-align:left;">김지민</td>
-            <td style="color:#488; font-size:18px; text-align:left;">농심</td>
-            <td style="font-weight:700;">32.16</td>
-          </tr>
-          <tr>
-            <td style="color:#FFD700; font-weight:700; font-size:19px;">2</td>
-            <td style="font-weight:600; color:#277; font-size:18px; text-align:left;">박선호</td>
-            <td style="color:#488; font-size:18px; text-align:left;">NDS</td>
-            <td style="font-weight:700;">34.25</td>
-          </tr>
-          <tr>
-            <td style="color:#FFD700; font-weight:700; font-size:18px;">3</td>
-            <td style="font-weight:600; color:#277; font-size:18px; text-align:left;">이예지</td>
-            <td style="color:#488; font-size:18px; text-align:left;">NDS</td>
-            <td style="font-weight:700;">35.10</td>
-          </tr>
-          <tr>
-            <td style="color:#222;">4</td>
-            <td style="font-weight:600; color:#277; text-align:left;">최우진</td>
-            <td style="color:#488; text-align:left;">농심</td>
-            <td style="font-weight:700;">38.85</td>
-          </tr>
-          <tr>
-            <td style="color:#222;">5</td>
-            <td style="font-weight:600; color:#277; text-align:left;">이하늘</td>
-            <td style="color:#488; text-align:left;">NDS</td>
-            <td style="font-weight:700;">41.22</td>
-          </tr>
-        </tbody>
-      </table>
-      <div style="text-align:right; margin-top:8px; color:#aaa; font-size:0.97rem;">* 예시 데이터입니다.</div>
-    `;
+const RANKING_HTML = `
+  <button class="modal-close" onclick="hideModal()">&times;</button>
+  <h2 style="text-align:center; margin-bottom:14px; font-weight:800; font-size:2rem;">
+    🏆 실시간 랭킹 보드
+  </h2>
+  <table class="ranking-board-table">
+    <thead>
+      <tr style="border-bottom:2px solid #eee;">
+        <th>순위</th>
+        <th style="text-align:left;">이름</th>
+        <th style="text-align:left;">회사</th>
+        <th>시간(초)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="color:#FFD700; font-weight:700; font-size:20px;">1</td>
+        <td style="font-weight:600; color:#277; font-size:18px; text-align:left;">김은송</td>
+        <td style="color:#488; font-size:18px; text-align:left;">NDS</td>
+        <td style="font-weight:700;">7.15</td>
+      </tr>
+      <tr>
+        <td style="color:#FFD700; font-weight:700; font-size:19px;">2</td>
+        <td style="font-weight:600; color:#277; font-size:18px; text-align:left;">윤효정</td>
+        <td style="color:#488; font-size:18px; text-align:left;">NDS</td>
+        <td style="font-weight:700;">7.47</td>
+      </tr>
+      <tr>
+        <td style="color:#FFD700; font-weight:700; font-size:18px;">3</td>
+        <td style="font-weight:600; color:#277; font-size:18px; text-align:left;">이태은</td>
+        <td style="color:#488; font-size:18px; text-align:left;">농심</td>
+        <td style="font-weight:700;">8.1</td>
+      </tr>
+      <tr>
+        <td style="color:#222;">4</td>
+        <td style="font-weight:600; color:#277; text-align:left;">박건희</td>
+        <td style="color:#488; text-align:left;">NDS</td>
+        <td style="font-weight:700;">8.29</td>
+      </tr>
+      <tr>
+        <td style="color:#222;">5</td>
+        <td style="font-weight:600; color:#277; text-align:left;">윤설</td>
+        <td style="color:#488; text-align:left;">NDS</td>
+        <td style="font-weight:700;">8.31</td>
+      </tr>
+      <tr>
+        <td style="color:#222;">6</td>
+        <td style="font-weight:600; color:#277; text-align:left;">김완상</td>
+        <td style="color:#488; text-align:left;">NDS</td>
+        <td style="font-weight:700;">8.59</td>
+      </tr>
+      <tr>
+        <td style="color:#222;">7</td>
+        <td style="font-weight:600; color:#277; text-align:left;">박성훈</td>
+        <td style="color:#488; text-align:left;">농심</td>
+        <td style="font-weight:700;">9.76</td>
+      </tr>
+      <tr>
+        <td style="color:#222;">8</td>
+        <td style="font-weight:600; color:#277; text-align:left;">김희섭</td>
+        <td style="color:#488; text-align:left;">농심</td>
+        <td style="font-weight:700;">9.83</td>
+      </tr>
+      <tr>
+        <td style="color:#222;">9</td>
+        <td style="font-weight:600; color:#277; text-align:left;">이경민</td>
+        <td style="color:#488; text-align:left;">율촌화학</td>
+        <td style="font-weight:700;">10.79</td>
+      </tr>
+      <tr>
+        <td style="color:#222;">10</td>
+        <td style="font-weight:600; color:#277; text-align:left;">문희원</td>
+        <td style="color:#488; text-align:left;">농심태경</td>
+        <td style="font-weight:700;">13.14</td>
+      </tr>
+    </tbody>
+  </table>
+  <div style="text-align:right; margin-top:8px; color:#aaa; font-size:0.97rem;">*최종 순위 입니다.</div>
+`;
+
 
     const PRIZE_HTML = `
       <button class="modal-close" onclick="hideModal()">&times;</button>
